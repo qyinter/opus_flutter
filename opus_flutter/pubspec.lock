@@ -91,6 +91,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  opus_flutter_macos:
+    dependency: "direct main"
+    description:
+      path: "../opus_flutter_macos"
+      relative: true
+    source: path
+    version: "3.0.0"
   opus_flutter_platform_interface:
     dependency: "direct main"
     description:

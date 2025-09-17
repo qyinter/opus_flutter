@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:opus_flutter_android/opus_flutter_android.dart';
 import 'package:opus_flutter_ios/opus_flutter_ios.dart';
+import 'package:opus_flutter_macos/opus_flutter_macos.dart';
 import 'package:opus_flutter_windows/opus_flutter_windows.dart';
 import 'package:opus_flutter_platform_interface/opus_flutter_platform_interface.dart';
 
@@ -29,6 +30,14 @@ void _flutterIssue81421Workaround() {
   }
 }
 
+void _registerMacOSImplementation() {
+  if (Platform.isMacOS) {
+    if (!(OpusFlutterPlatform.instance is OpusFlutterMacOS)) {
+      OpusFlutterMacOS.registerWith();
+    }
+  }
+}
+
 /// On supported platforms a `DynamicLibrary` of the [opus audio codec](https://opus-codec.org/) is returned,
 /// whereas on not supported platforms an [UnsupportedError] is thrown.
 ///
@@ -42,5 +51,6 @@ void _flutterIssue81421Workaround() {
 Future<dynamic> load() {
   _flutterIssue52267Workaround();
   _flutterIssue81421Workaround();
+  _registerMacOSImplementation();
   return OpusFlutterPlatform.instance.load();
 }
