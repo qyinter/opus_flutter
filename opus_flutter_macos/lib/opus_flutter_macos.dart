@@ -24,14 +24,16 @@ class OpusFlutterMacOS extends OpusFlutterPlatform {
 
   static Future<Directory> _workDirectory() async {
     final String tmpPath = (await getTemporaryDirectory()).absolute.path;
-    final Directory dir = Directory('$tmpPath/opus_flutter_macos/opus').absolute;
+    final Directory dir =
+        Directory('$tmpPath/opus_flutter_macos/opus').absolute;
     await dir.create(recursive: true);
     return dir;
   }
 
   static Future<String?> _copyLibraryFromAssets() async {
     try {
-      final ByteData data = await rootBundle.load('$_bundlePrefix$_libraryAsset');
+      final ByteData data =
+          await rootBundle.load('$_bundlePrefix$_libraryAsset');
       final Directory dir = await _workDirectory();
       final File libraryFile = File('${dir.path}/$_libraryAsset');
       if (!(await libraryFile.exists())) {
@@ -41,6 +43,7 @@ class OpusFlutterMacOS extends OpusFlutterPlatform {
       }
 
       await _ensureLicense(dir);
+      await _blessLibrary(libraryFile.path);
       return libraryFile.path;
     } on FlutterError {
       return null;
@@ -49,7 +52,8 @@ class OpusFlutterMacOS extends OpusFlutterPlatform {
 
   static Future<void> _ensureLicense(Directory dir) async {
     try {
-      final ByteData data = await rootBundle.load('$_bundlePrefix$_licenseFile');
+      final ByteData data =
+          await rootBundle.load('$_bundlePrefix$_licenseFile');
       final File license = File('${dir.path}/$_licenseFile');
       if (!(await license.exists())) {
         await license.writeAsBytes(
@@ -72,6 +76,27 @@ class OpusFlutterMacOS extends OpusFlutterPlatform {
       return null;
     } catch (_) {
       return null;
+    }
+  }
+
+  static Future<void> _blessLibrary(String path) async {
+    if (!await File(path).exists()) {
+      return;
+    }
+
+    if (!kIsWeb && Platform.isMacOS) {
+      try {
+        await Process.run(
+            'xattr', <String>['-d', 'com.apple.quarantine', path]);
+      } catch (_) {
+        // Ignore failures; attribute might not be present or xattr missing.
+      }
+
+      try {
+        await Process.run('codesign', <String>['--force', '--sign', '-', path]);
+      } catch (_) {
+        // Ad-hoc signing is best effort; fall back to unsigned library.
+      }
     }
   }
 
