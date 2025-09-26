@@ -27,3 +27,4 @@ flutter:
     platforms:
       windows:
         dartPluginClass: OpusFlutterWindows
+        pluginClass: none
