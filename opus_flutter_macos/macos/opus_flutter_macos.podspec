@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*', 'Libraries/*.h'
   s.public_header_files = 'Libraries/*.h'
   s.dependency 'FlutterMacOS'
-  s.platform = :osx, '15.0'
+  s.platform = :osx, '13.0'
   s.vendored_libraries = 'Libraries/libopus.a'
   
   s.pod_target_xcconfig = { 
