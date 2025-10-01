@@ -14,7 +14,6 @@ dependencies:
   opus_flutter_android: ^3.0.1
   opus_flutter_ios: ^3.0.1
   opus_flutter_macos:
-    # path: ../opus_flutter_macos
     git:
       url: https://github.com/qyinter/opus_flutter.git
       path: opus_flutter_macos
