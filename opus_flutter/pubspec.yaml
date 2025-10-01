@@ -18,7 +18,10 @@ dependencies:
     git:
       url: https://github.com/qyinter/opus_flutter.git
       path: opus_flutter_macos
-  opus_flutter_windows: ^3.0.0
+  opus_flutter_windows:
+    git:
+      url: https://github.com/qyinter/opus_flutter.git
+      path: opus_flutter_windows
   opus_flutter_web: ^3.0.3
 
 flutter:
